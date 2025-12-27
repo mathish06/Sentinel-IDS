@@ -19,11 +19,12 @@ volatile int attack_counter = 0;
 void promiscuous_rx_cb(void* buf, wifi_promiscuous_pkt_type_t type) {
   wifi_promiscuous_pkt_t *packet = (wifi_promiscuous_pkt_t*)buf;
   wifi_header_t *header = (wifi_header_t*)packet->payload;
-  uint8_t typef = header->frame_control[0];
+  uint8_t frame_type = header->frame_control[0];
 
-  if (type == 0xC0 || type == 0xA0) {
+  if (frame_type == 0xC0 || frame_type == 0xA0) {
     attack_counter++;
   }
+  packet_counter++;
 }
 
 void setup() {
@@ -60,6 +61,8 @@ void loop() {
   display.println(packet_counter);
   display.print("Channel: ");
   display.println(WiFi.channel());
+  display.print("Attacks: ");
+  display.println(attack_counter);
   display.display();
 
   if (packet_counter > 10000){

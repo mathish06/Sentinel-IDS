@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
+#include "wifi_header.h"
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -13,9 +14,16 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 volatile int packet_counter = 0;
 int current_channel = 1;
+volatile int attack_counter = 0;
 
 void promiscuous_rx_cb(void* buf, wifi_promiscuous_pkt_type_t type) {
-  packet_counter++;
+  wifi_promiscuous_pkt_t *packet = (wifi_promiscuous_pkt_t*)buf;
+  wifi_header_t *header = (wifi_header_t*)packet->payload;
+  uint8_t typef = header->frame_control[0];
+
+  if (type == 0xC0 || type == 0xA0) {
+    attack_counter++;
+  }
 }
 
 void setup() {
@@ -40,7 +48,7 @@ void setup() {
   esp_wifi_set_promiscuous(true);
   esp_wifi_set_promiscuous_rx_cb(&promiscuous_rx_cb);
 
-  delay(1000);
+  delay(2000);
 }
 
 void loop() {

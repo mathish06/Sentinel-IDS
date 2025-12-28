@@ -46,7 +46,8 @@ void setup() {
   Serial.begin(115200);
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println("OLED Fail"); while(1);
+    Serial.println("OLED Fail");
+    while(1);
   }
 
   pixels.begin();
@@ -83,11 +84,15 @@ void loop() {
   display.clearDisplay();
   display.setCursor(0, 0);
   
-  display.print("CH: "); display.print(current_channel);
-  display.print(" | Pkts: "); display.println(packet_counter);
+  display.print("CH: ");
+  display.print(current_channel);
+  display.print(" | Pkts: ");
+  display.println(packet_counter);
   display.println("----------------");
-  display.print("REAL Threat: "); display.println(real_attacks);
-  display.print("SIMU Test:   "); display.println(simu_attacks);
+  display.print("REAL Threat: ");
+  display.println(real_attacks);
+  display.print("SIMU Test:   ");
+  display.println(simu_attacks);
   display.display();
 
   if (packet_counter > 10000){

@@ -1,61 +1,90 @@
 # SENTINEL 🛡️
-### Passive Wifi Intrusion Detection System (P-IDS)
+### Passive WiFi Intrusion Detection System (P-IDS)
 
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Status](https://img.shields.io/badge/Status-Stable-brightgreen)
 ![Platform](https://img.shields.io/badge/Platform-ESP32-blue)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Framework](https://img.shields.io/badge/Framework-PlatformIO%20%2F%20Arduino-purple)
 
-**Sentinel** is a portable, standalone hardware device designed to monitor 802.11 WiFi traffic in real-time. Built on the ESP32 microcontroller, it operates in **promiscuous mode** to analyze raw packets and detect specific attack signatures without ever connecting to a network.
+**Sentinel** is a portable, standalone hardware device designed to monitor 802.11 WiFi traffic in real-time. Built on the ESP32 microcontroller, it operates in **promiscuous mode** to analyze raw packets and detect specific attack signatures — without ever connecting to a network.
 
 ## 🎯 Project Goal
-The primary goal of Sentinel is to provide a low-cost, "Blue Team" tool for detecting **Deauthentication Flooding attacks** and potential **Evil Twin** attempts. Unlike software-based solutions (like Wireshark) that require a laptop, Sentinel is a pocket-sized "watchdog" for your wireless environment.
+
+The primary goal of Sentinel is to provide a **low-cost, Blue Team tool** for detecting **Deauthentication Flooding attacks** and potential **Evil Twin** attempts. Unlike software-based solutions (like Wireshark) that require a laptop, Sentinel is a pocket-sized "watchdog" for your wireless environment.
 
 ## ⚙️ Features
-* **Passive Sniffing:** Operates transparently without IP address or network association.
-* **Channel Hopping:** Cyclically scans 2.4GHz WiFi channels (1-13) to cover the full spectrum.
-* **Attack Detection:** Identifies abnormal bursts of Management Frames (Deauth/Disassoc packets).
-* **Visual Feedback:**
-    * **OLED Display:** Shows current channel, packet rate, and threat status.
-    * **RGB LED:** Color-coded alert system (Green = Safe, Red = Under Attack).
-* **Portable:** Powered by a generic 5V power bank.
+
+- **Passive Sniffing:** Operates transparently with no IP address or network association.
+- **Channel Hopping:** Cyclically scans 2.4GHz WiFi channels (1–13) to cover the full spectrum.
+- **Attack Detection:** Identifies abnormal bursts of Management Frames (Deauth/Disassoc packets).
+- **Simulation Mode:** Differentiates real attacks from lab-generated test frames (custom MAC signature).
+- **Visual Feedback:**
+  - **OLED Display:** Shows current channel, packet rate, real threat count, and simulation test count.
+  - **RGB LED:** Color-coded alert system — 🔵 Blue = Boot, 🟢 Green = Under Attack, 🔴 Red = Safe (inverted for visibility).
+- **Portable:** Powered by any generic 5V USB power bank.
 
 ## 🛠️ Hardware Stack
-* **MCU:** ESP32-WROOM-32U (DevKit V1) with external antenna for extended range.
-* **Display:** 0.96" OLED (SSD1306 driver, I2C).
-* **Indicators:** WS2812B Addressable RGB LED (NeoPixel).
-* **Power:** 5000mAh USB Power Bank.
+
+| Component | Model | Notes |
+| :--- | :--- | :--- |
+| **MCU** | ESP32-WROOM-32U (DevKit V1) | External antenna for extended range |
+| **Display** | 0.96" OLED SSD1306 | I2C interface |
+| **LED** | WS2812B Addressable RGB (NeoPixel) | 1 pixel |
+| **Power** | 5000mAh USB Power Bank | Generic 5V |
+
+## 🔌 Wiring (Pinout)
+
+| Component | ESP32 Pin | Description |
+| :--- | :--- | :--- |
+| **OLED SDA** | GPIO 21 | I2C Data |
+| **OLED SCL** | GPIO 22 | I2C Clock |
+| **NeoPixel Data** | GPIO 15 | WS2812B Signal |
+| **VCC** | VIN (5V) | Power from USB |
+| **GND** | GND | Ground |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-* [Visual Studio Code](https://code.visualstudio.com/)
-* [PlatformIO](https://platformio.org/) Extension
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [PlatformIO](https://platformio.org/) IDE Extension
 
 ### Installation
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/TonUsername/Sentinel.git](https://github.com/TonUsername/Sentinel.git)
-    cd Sentinel
-    ```
-2.  Open the folder in VS Code.
-3.  Connect your ESP32 via USB.
-4.  Upload the code using PlatformIO:
-    * Click the **PlatformIO logo** on the left sidebar.
-    * Click **Pick a task...** > **General** > **Upload**.
 
-## 🔌 Wiring (Pinout)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mathish06/Sentinel-IDS.git
+   cd Sentinel-IDS
+   ```
 
-| Component | Pin ESP32 | Description |
-| :--- | :--- | :--- |
-| **OLED SDA** | GPIO 21 | I2C Data |
-| **OLED SCL** | GPIO 22 | I2C Clock |
-| **NeoPixel** | GPIO 15 | Data In |
-| **VCC** | VIN (5V) | Power |
-| **GND** | GND | Ground |
+2. Open the folder in VS Code.
+
+3. Connect your ESP32 via USB.
+
+4. Upload the firmware using PlatformIO:
+   - Click the **PlatformIO logo** in the left sidebar.
+   - Select **Pick a task… → General → Upload**.
+
+PlatformIO will automatically download all required libraries (`Adafruit SSD1306`, `Adafruit GFX`, `Adafruit NeoPixel`) and flash the ESP32.
+
+## 📦 Dependencies
+
+Managed automatically via PlatformIO:
+
+```ini
+lib_deps =
+    adafruit/Adafruit SSD1306 @ ^2.5.7
+    adafruit/Adafruit GFX Library @ ^1.11.5
+    adafruit/Adafruit NeoPixel
+```
 
 ## ⚠️ Legal Disclaimer
-**This project is for educational and defensive purposes only.**
-The device is designed to detect attacks, not to initiate them. Usage of this tool for monitoring networks without authorization may be illegal in your jurisdiction. The author assumes no responsibility for misuse of this software.
+
+**This project is strictly for educational and defensive (Blue Team) purposes.**
+
+The device is designed to *detect* wireless attacks, not to initiate them. Monitoring wireless networks without explicit authorization from the network owner may be illegal in your jurisdiction. The author assumes no responsibility for any misuse of this software or hardware design.
 
 ---
+
 *Project created as part of the Epitech First Year Hub module.*
